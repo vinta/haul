@@ -1,0 +1,7 @@
+*.py[cod]
+
+.coverage
+.tox
+
+.codeintel
+.DS_STORE
