@@ -1,0 +1,4 @@
+beautifulsoup4
+cssutils
+lxml
+requests
