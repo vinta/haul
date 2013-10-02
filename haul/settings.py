@@ -8,12 +8,12 @@ FINDER_PIPELINE = (
     'haul.finders.pipeline.css.background_image_finder',
 )
 
-PROPAGATOR_PIPELINE = (
-    'haul.extenders.pipeline.google.blogspot_s1600_propagator',
-    'haul.extenders.pipeline.google.ggpht_s1600_propagator',
-    'haul.extenders.pipeline.google.googleusercontent_s1600_propagator',
-    'haul.extenders.pipeline.pinterest.original_image_propagator',
-    'haul.extenders.pipeline.wordpress.original_image_propagator',
-    'haul.extenders.pipeline.tumblr.media_1280_propagator',
-    'haul.extenders.pipeline.tumblr.avatar_128_propagator',
+EXTENDER_PIPELINE = (
+    'haul.extenders.pipeline.google.blogspot_s1600_extender',
+    'haul.extenders.pipeline.google.ggpht_s1600_extender',
+    'haul.extenders.pipeline.google.googleusercontent_s1600_extender',
+    'haul.extenders.pipeline.pinterest.original_image_extender',
+    'haul.extenders.pipeline.wordpress.original_image_extender',
+    'haul.extenders.pipeline.tumblr.media_1280_extender',
+    'haul.extenders.pipeline.tumblr.avatar_128_extender',
 )

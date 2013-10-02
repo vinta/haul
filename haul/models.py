@@ -21,11 +21,11 @@ class Haul(object):
     def __init__(self,
                  parser=settings.DEFAULT_PARSER,
                  finder_pipeline=settings.FINDER_PIPELINE,
-                 propagator_pipeline=settings.PROPAGATOR_PIPELINE):
+                 extender_pipeline=settings.EXTENDER_PIPELINE):
 
         self.parser = parser
         self.finder_pipeline = finder_pipeline
-        self.propagator_pipeline = propagator_pipeline
+        self.extender_pipeline = extender_pipeline
 
         self.response = None # via Requests
         self.soup = None # via BeautifulSoup
@@ -105,18 +105,18 @@ class Haul(object):
 
         return self.result
 
-    def start_propagator_pipeline(self, *args, **kwargs):
+    def start_extender_pipeline(self, *args, **kwargs):
         pipeline_input = {
             'finder_image_urls': self.result.finder_image_urls,
         }
         pipeline_output = pipeline_input.copy()
 
-        for idx, name in enumerate(self.propagator_pipeline):
+        for idx, name in enumerate(self.extender_pipeline):
             pipeline_output['pipeline_index'] = idx
             pipeline_output['pipeline_break'] = False
 
-            propagator_func = utils.module_member(name)
-            output = propagator_func(*args, **pipeline_output)
+            extender_func = utils.module_member(name)
+            output = extender_func(*args, **pipeline_output)
             pipeline_output.update(output)
 
             if pipeline_output['pipeline_break']:
@@ -127,7 +127,7 @@ class Haul(object):
         pipeline_output.pop('pipeline_break', None)
         pipeline_output.pop('finder_image_urls', None)
 
-        self.result.propagator_image_urls = pipeline_output.get('propagator_image_urls', [])
+        self.result.extender_image_urls = pipeline_output.get('extender_image_urls', [])
 
         return self.result
 
@@ -152,13 +152,13 @@ class Haul(object):
             self.start_finder_pipeline()
 
             if extend:
-                self.start_propagator_pipeline()
+                self.start_extender_pipeline()
 
         elif 'image/' in content_type:
             self.result.finder_image_urls = [str(self.response.url), ]
 
             if extend:
-                self.start_propagator_pipeline()
+                self.start_extender_pipeline()
 
         else:
             raise exceptions.ContentTypeNotSupported(content_type)
@@ -176,9 +176,9 @@ class HaulResult(object):
         self.url = None
         self.title = None
         self.finder_image_urls = []
-        self.propagator_image_urls = []
+        self.extender_image_urls = []
         # self.finder_image_file = None
-        # self.propagator_image_file = None
+        # self.extender_image_file = None
 
     def __repr__(self):
         return '<HaulResult [Content-Type: %s]>' % (self.content_type)
@@ -186,12 +186,12 @@ class HaulResult(object):
     @property
     def image_urls(self):
         """
-        Combine finder_image_urls and propagator_image_urls,
+        Combine finder_image_urls and extender_image_urls,
         remove duplicate but keep order
         """
 
         all_image_urls = self.finder_image_urls[:]
-        for image_url in self.propagator_image_urls:
+        for image_url in self.extender_image_urls:
             if not utils.in_ignorecase(image_url, all_image_urls):
                 all_image_urls.append(image_url)
 
@@ -199,8 +199,8 @@ class HaulResult(object):
 
     # @property
     # def image_file(self):
-    #     if self.propagator_image_file:
-    #         which = self.propagator_image_file
+    #     if self.extender_image_file:
+    #         which = self.extender_image_file
     #     elif self.finder_image_file:
     #         which = self.finder_image_file
     #     else:
