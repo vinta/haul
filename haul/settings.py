@@ -9,11 +9,11 @@ FINDER_PIPELINE = (
 )
 
 PROPAGATOR_PIPELINE = (
-    'haul.propagators.pipeline.google.blogspot_s1600_propagator',
-    'haul.propagators.pipeline.google.ggpht_s1600_propagator',
-    'haul.propagators.pipeline.google.googleusercontent_s1600_propagator',
-    'haul.propagators.pipeline.pinterest.original_image_propagator',
-    'haul.propagators.pipeline.wordpress.original_image_propagator',
-    'haul.propagators.pipeline.tumblr.media_1280_propagator',
-    'haul.propagators.pipeline.tumblr.avatar_128_propagator',
+    'haul.extenders.pipeline.google.blogspot_s1600_propagator',
+    'haul.extenders.pipeline.google.ggpht_s1600_propagator',
+    'haul.extenders.pipeline.google.googleusercontent_s1600_propagator',
+    'haul.extenders.pipeline.pinterest.original_image_propagator',
+    'haul.extenders.pipeline.wordpress.original_image_propagator',
+    'haul.extenders.pipeline.tumblr.media_1280_propagator',
+    'haul.extenders.pipeline.tumblr.avatar_128_propagator',
 )

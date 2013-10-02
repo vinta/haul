@@ -102,21 +102,21 @@ class PropagatorPipelineTestCase(HaulBaseTestCase):
 
     def test_blogspot(self):
         h = Haul()
-        hr = h.find_images(self.blogspot_html, propagate=True)
+        hr = h.find_images(self.blogspot_html, extend=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('text/html', hr.content_type)
 
     def test_tumblr(self):
         h = Haul()
-        hr = h.find_images(self.tumblr_html, propagate=True)
+        hr = h.find_images(self.tumblr_html, extend=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('text/html', hr.content_type)
 
     def test_pinterest_image_url(self):
         h = Haul()
-        hr = h.find_images(self.pinterest_image_url, propagate=True)
+        hr = h.find_images(self.pinterest_image_url, extend=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('image/', hr.content_type)
@@ -127,7 +127,7 @@ class PropagatorPipelineTestCase(HaulBaseTestCase):
 
     def test_tumblr_image_url(self):
         h = Haul()
-        hr = h.find_images(self.tumblr_image_url, propagate=True)
+        hr = h.find_images(self.tumblr_image_url, extend=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('image/', hr.content_type)
@@ -138,7 +138,7 @@ class PropagatorPipelineTestCase(HaulBaseTestCase):
 
     def test_wordpress(self):
         h = Haul()
-        hr = h.find_images(self.wordpress_html, propagate=True)
+        hr = h.find_images(self.wordpress_html, extend=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('text/html', hr.content_type)
@@ -153,13 +153,13 @@ class ExceptionsTestCase(HaulBaseTestCase):
         h = Haul()
 
         with self.assertRaises(exceptions.RetrieveError):
-            hr = h.find_images(self.broken_url)
+            h.find_images(self.broken_url)
 
     def test_content_type_not_supported(self):
         h = Haul()
 
         with self.assertRaises(exceptions.ContentTypeNotSupported):
-            hr = h.find_images(self.not_supported_url)
+            h.find_images(self.not_supported_url)
 
 
 if __name__ == '__main__':

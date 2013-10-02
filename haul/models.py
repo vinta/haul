@@ -132,7 +132,7 @@ class Haul(object):
         return self.result
 
     # API
-    def find_images(self, url_or_html, propagate=False):
+    def find_images(self, url_or_html, extend=False):
         url = None
         content = None
 
@@ -151,13 +151,13 @@ class Haul(object):
 
             self.start_finder_pipeline()
 
-            if propagate:
+            if extend:
                 self.start_propagator_pipeline()
 
         elif 'image/' in content_type:
             self.result.finder_image_urls = [str(self.response.url), ]
 
-            if propagate:
+            if extend:
                 self.start_propagator_pipeline()
 
         else:

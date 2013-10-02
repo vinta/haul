@@ -18,7 +18,7 @@ or
 from haul import Haul
 
 h = Haul()
-h.find_images('http://fashion-fever.nl/dressing-up/', propagate=True)
+h.find_images('http://fashion-fever.nl/dressing-up/', extend=True)
 ```
 
 
