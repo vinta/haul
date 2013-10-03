@@ -1,7 +1,10 @@
 *.py[cod]
 
-.coverage
-.tox
+*.egg
+*.egg-info
+dist
+build
+sdist
 
 .codeintel
 .DS_STORE
