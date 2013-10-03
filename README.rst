@@ -6,11 +6,18 @@ Find thumbnails and original images from URL or HTML file.
 Installation
 ------------
 
+on Ubuntu
+
+.. code-block:: bash
+
+    $ sudo apt-get install build-essential python-dev libxml2-dev libxslt1-dev
+    $ pip install haul
+
+on Mac OS X
+
 .. code-block:: bash
 
     $ pip install haul
-    # or
-    $ easy_install haul
 
 Usage
 -----

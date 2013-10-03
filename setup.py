@@ -10,12 +10,12 @@ try:
 except ImportError:
     from distutils.core import setup
 
-import haul
-
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
+
+long_description = open('README.rst').read() + '\n\n' + open('HISTORY.rst').read()
 
 license = open('LICENSE').read()
 
@@ -31,9 +31,9 @@ packages = [
 
 setup(
     name='haul',
-    version=haul.__version__,
+    version='1.0.0',
     description='An Extensible Image Crawler',
-    long_description='An Extensible Image Crawler',
+    long_description=long_description,
     keywords='haul web image content scraper parser crawler',
     author='Vinta Chen',
     author_email='vinta.chen@gmail.com',
