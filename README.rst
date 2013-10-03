@@ -1,10 +1,11 @@
+====
 Haul
 ====
 
 Find thumbnails and original images from URL or HTML file.
 
 Installation
-------------
+============
 
 on Ubuntu
 
@@ -20,7 +21,7 @@ on Mac OS X
     $ pip install haul
 
 Usage
------
+=====
 
 Find images from ``img src``, ``a href`` and even ``background-image``:
 
@@ -69,6 +70,9 @@ Find original (or bigger size) images with ``extend=True``:
         'http://31.media.tumblr.com/avatar_0acf8f9b4380_128.png',
     ]
     """
+
+Advanced Usage
+==============
 
 Custom finder / extender pipeline:
 
