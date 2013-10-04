@@ -1,10 +1,11 @@
+====
 Haul
 ====
 
 Find thumbnails and original images from URL or HTML file.
 
 Installation
-------------
+============
 
 on Ubuntu
 
@@ -20,7 +21,7 @@ on Mac OS X
     $ pip install haul
 
 Usage
------
+=====
 
 Find images from ``img src``, ``a href`` and even ``background-image``:
 
@@ -70,15 +71,43 @@ Find original (or bigger size) images with ``extend=True``:
     ]
     """
 
+Advanced Usage
+==============
+
 Custom finder / extender pipeline:
 
 .. code-block:: python
 
     from haul import Haul
+    from haul.utils import in_ignorecase
 
-    IMAGE_FINDER_PIPELINE = (
+
+    def img_data_src_finder(pipeline_index,
+                            soup,
+                            finder_image_urls=[],
+                            *args, **kwargs):
+        """
+        Find image URL in <img>'s data-src attribute
+        """
+
+        now_finder_image_urls = []
+
+        for img in soup.find_all('img'):
+            src = img.get('data-src', None)
+            if src:
+                if (not in_ignorecase(src, finder_image_urls)) and \
+                   (not in_ignorecase(src, now_finder_image_urls)):
+                    now_finder_image_urls.append(src)
+
+        output = {}
+        output['finder_image_urls'] = finder_image_urls + now_finder_image_urls
+
+        return output
+
+    MY_FINDER_PIPELINE = (
         'haul.finders.pipeline.html.img_src_finder',
         'haul.finders.pipeline.css.background_image_finder',
+        img_data_src_finder,
     )
 
     GOOGLE_SITES_EXTENDER_PIEPLINE = (
@@ -89,7 +118,7 @@ Custom finder / extender pipeline:
 
     url = 'http://fashion-fever.nl/dressing-up/'
     h = Haul(parser='lxml',
-             finder_pipeline=IMAGE_FINDER_PIPELINE,
+             finder_pipeline=MY_FINDER_PIPELINE,
              extender_pipeline=GOOGLE_SITES_EXTENDER_PIEPLINE)
     result = h.find_images(url, extend=True)
 
