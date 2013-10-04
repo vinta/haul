@@ -1,5 +1,6 @@
 # coding: utf-8
 
+# http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser
 DEFAULT_PARSER = 'lxml'
 
 FINDER_PIPELINE = (

@@ -89,9 +89,15 @@ class Haul(object):
             pipeline_output['pipeline_index'] = idx
             pipeline_output['pipeline_break'] = False
 
-            finder_func = utils.module_member(name)
+            if hasattr(name, '__call__'):
+                finder_func = name
+            else:
+                finder_func = utils.module_member(name)
+
             output = finder_func(*args, **pipeline_output)
-            pipeline_output.update(output)
+
+            if isinstance(output, dict):
+                pipeline_output.update(output)
 
             if pipeline_output['pipeline_break']:
                 break
@@ -115,9 +121,15 @@ class Haul(object):
             pipeline_output['pipeline_index'] = idx
             pipeline_output['pipeline_break'] = False
 
-            extender_func = utils.module_member(name)
+            if hasattr(name, '__call__'):
+                extender_func = name
+            else:
+                extender_func = utils.module_member(name)
+
             output = extender_func(*args, **pipeline_output)
-            pipeline_output.update(output)
+
+            if isinstance(output, dict):
+                pipeline_output.update(output)
 
             if pipeline_output['pipeline_break']:
                 break
