@@ -95,6 +95,7 @@ class FindImagesFromURLTestCase(HaulBaseTestCase):
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('image/', hr.content_type)
 
+
 class ExtenderPipelineTestCase(HaulBaseTestCase):
 
     def setUp(self):
@@ -142,6 +143,7 @@ class ExtenderPipelineTestCase(HaulBaseTestCase):
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('text/html', hr.content_type)
+
 
 class CustomFinderPipelineTestCase(HaulBaseTestCase):
 
@@ -192,6 +194,7 @@ class CustomFinderPipelineTestCase(HaulBaseTestCase):
         image_urls_count = len(image_urls)
         self.assertEqual(image_urls_count, 6)
 
+
 class ExceptionsTestCase(HaulBaseTestCase):
 
     def setUp(self):
@@ -211,5 +214,5 @@ class ExceptionsTestCase(HaulBaseTestCase):
 
 
 if __name__ == '__main__':
-    print 'testing Haul'
+    print('testing Haul')
     unittest.main()
