@@ -1,4 +1,3 @@
-====
 Haul
 ====
 
@@ -123,7 +122,7 @@ Custom finder / extender pipeline:
     result = h.find_images(url, extend=True)
 
 Run Tests
----------
+=========
 
 .. code-block:: bash
 
