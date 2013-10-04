@@ -95,10 +95,10 @@ class FindImagesFromURLTestCase(HaulBaseTestCase):
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('image/', hr.content_type)
 
-class PropagatorPipelineTestCase(HaulBaseTestCase):
+class ExtenderPipelineTestCase(HaulBaseTestCase):
 
     def setUp(self):
-        super(PropagatorPipelineTestCase, self).setUp()
+        super(ExtenderPipelineTestCase, self).setUp()
 
     def test_blogspot(self):
         h = Haul()
@@ -143,6 +143,54 @@ class PropagatorPipelineTestCase(HaulBaseTestCase):
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('text/html', hr.content_type)
 
+class CustomFinderPipelineTestCase(HaulBaseTestCase):
+
+    def setUp(self):
+        super(CustomFinderPipelineTestCase, self).setUp()
+
+    def test_find_html_document(self):
+        from haul.utils import in_ignorecase
+
+        def img_data_src_finder(pipeline_index,
+                                soup,
+                                finder_image_urls=[],
+                                *args, **kwargs):
+            """
+            Find image URL in <img>'s data-src attribute
+            """
+
+            now_finder_image_urls = []
+
+            for img in soup.find_all('img'):
+                src = img.get('data-src', None)
+                if src:
+                    if (not in_ignorecase(src, finder_image_urls)) and \
+                       (not in_ignorecase(src, now_finder_image_urls)):
+                        now_finder_image_urls.append(src)
+
+            output = {}
+            output['finder_image_urls'] = finder_image_urls + now_finder_image_urls
+
+            return output
+
+        FINDER_PIPELINE = (
+            'haul.finders.pipeline.html.img_src_finder',
+            'haul.finders.pipeline.html.a_href_finder',
+            'haul.finders.pipeline.css.background_image_finder',
+            img_data_src_finder,
+        )
+
+        h = Haul(finder_pipeline=FINDER_PIPELINE)
+        hr = h.find_images(self.complete_html)
+
+        self.assertIsInstance(hr, HaulResult)
+
+        test_image_url = 'http://files.heelsfetishism.com/media/heels/2013/10/03/18099_307a62430fa045cc9b2124d16de63f33.jpg'
+        self.assertIn(test_image_url, hr.finder_image_urls)
+
+        image_urls = hr.image_urls
+        image_urls_count = len(image_urls)
+        self.assertEqual(image_urls_count, 6)
 
 class ExceptionsTestCase(HaulBaseTestCase):
 
