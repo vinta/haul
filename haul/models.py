@@ -10,7 +10,6 @@ from . import exceptions, settings, utils
 
 
 simple_url_re = re.compile(r'^https?://\[?\w', re.IGNORECASE)
-simple_url_2_re = re.compile(r'^www\.|^(?!http)\w[^@]+\.(com|edu|gov|int|mil|net|org)$', re.IGNORECASE)
 
 
 class Haul(object):
@@ -89,9 +88,15 @@ class Haul(object):
             pipeline_output['pipeline_index'] = idx
             pipeline_output['pipeline_break'] = False
 
-            finder_func = utils.module_member(name)
+            if hasattr(name, '__call__'):
+                finder_func = name
+            else:
+                finder_func = utils.module_member(name)
+
             output = finder_func(*args, **pipeline_output)
-            pipeline_output.update(output)
+
+            if isinstance(output, dict):
+                pipeline_output.update(output)
 
             if pipeline_output['pipeline_break']:
                 break
@@ -115,9 +120,15 @@ class Haul(object):
             pipeline_output['pipeline_index'] = idx
             pipeline_output['pipeline_break'] = False
 
-            extender_func = utils.module_member(name)
+            if hasattr(name, '__call__'):
+                extender_func = name
+            else:
+                extender_func = utils.module_member(name)
+
             output = extender_func(*args, **pipeline_output)
-            pipeline_output.update(output)
+
+            if isinstance(output, dict):
+                pipeline_output.update(output)
 
             if pipeline_output['pipeline_break']:
                 break
@@ -177,8 +188,6 @@ class HaulResult(object):
         self.title = None
         self.finder_image_urls = []
         self.extender_image_urls = []
-        # self.finder_image_file = None
-        # self.extender_image_file = None
 
     def __repr__(self):
         return '<HaulResult [Content-Type: %s]>' % (self.content_type)
@@ -196,17 +205,6 @@ class HaulResult(object):
                 all_image_urls.append(image_url)
 
         return all_image_urls
-
-    # @property
-    # def image_file(self):
-    #     if self.extender_image_file:
-    #         which = self.extender_image_file
-    #     elif self.finder_image_file:
-    #         which = self.finder_image_file
-    #     else:
-    #         which = None
-
-    #     return which
 
     def to_dict(self):
         return self.__dict__

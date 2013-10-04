@@ -3,7 +3,10 @@
 import re
 
 
-def blogspot_s1600_extender(pipeline_index, finder_image_urls, *args, **kwargs):
+def blogspot_s1600_extender(pipeline_index,
+                            finder_image_urls,
+                            extender_image_urls=[],
+                            *args, **kwargs):
     """
     Example:
     http://1.bp.blogspot.com/-S97wTYQKbrY/UkWukhKhTKI/AAAAAAAAJ0g/fcRDiqVC8Us/s898/aaPOP+001.jpg
@@ -11,7 +14,6 @@ def blogspot_s1600_extender(pipeline_index, finder_image_urls, *args, **kwargs):
     http://1.bp.blogspot.com/-S97wTYQKbrY/UkWukhKhTKI/AAAAAAAAJ0g/fcRDiqVC8Us/s1600/aaPOP+001.jpg
     """
 
-    pre_extender_image_urls = kwargs.get('extender_image_urls', [])
     now_extender_image_urls = []
 
     search_re = re.compile(r'/s\d+/', re.IGNORECASE)
@@ -23,12 +25,15 @@ def blogspot_s1600_extender(pipeline_index, finder_image_urls, *args, **kwargs):
                 now_extender_image_urls.append(extender_image_url)
 
     output = {}
-    output['extender_image_urls'] = pre_extender_image_urls + now_extender_image_urls
+    output['extender_image_urls'] = extender_image_urls + now_extender_image_urls
 
     return output
 
 
-def ggpht_s1600_extender(pipeline_index, finder_image_urls, *args, **kwargs):
+def ggpht_s1600_extender(pipeline_index,
+                         finder_image_urls,
+                         extender_image_urls=[],
+                         *args, **kwargs):
     """
     Example:
     http://lh4.ggpht.com/-fFi-qJRuxeY/UjwHSOTHGOI/AAAAAAAArgE/SWTMT-hXzB4/s640/Celeber-ru-Emma-Watson-Net-A-Porter-The-Edit-Magazine-Photoshoot-2013-01.jpg
@@ -36,7 +41,6 @@ def ggpht_s1600_extender(pipeline_index, finder_image_urls, *args, **kwargs):
     http://lh4.ggpht.com/-fFi-qJRuxeY/UjwHSOTHGOI/AAAAAAAArgE/SWTMT-hXzB4/s1600/Celeber-ru-Emma-Watson-Net-A-Porter-The-Edit-Magazine-Photoshoot-2013-01.jpg
     """
 
-    pre_extender_image_urls = kwargs.get('extender_image_urls', [])
     now_extender_image_urls = []
 
     search_re = re.compile(r'/s\d+/', re.IGNORECASE)
@@ -48,12 +52,15 @@ def ggpht_s1600_extender(pipeline_index, finder_image_urls, *args, **kwargs):
                 now_extender_image_urls.append(extender_image_url)
 
     output = {}
-    output['extender_image_urls'] = pre_extender_image_urls + now_extender_image_urls
+    output['extender_image_urls'] = extender_image_urls + now_extender_image_urls
 
     return output
 
 
-def googleusercontent_s1600_extender(pipeline_index, finder_image_urls, *args, **kwargs):
+def googleusercontent_s1600_extender(pipeline_index,
+                                     finder_image_urls,
+                                     extender_image_urls=[],
+                                     *args, **kwargs):
     """
     Example:
     https://lh6.googleusercontent.com/-T6V-utZHzbE/Ukjn-1MDOSI/AAAAAAAAA3g/H6Qcw1zt4n0/w555-h399-no/2101_aa2cac09d1c6431b8a635d61cd9c4471.jpg
@@ -61,7 +68,6 @@ def googleusercontent_s1600_extender(pipeline_index, finder_image_urls, *args, *
     https://lh6.googleusercontent.com/-T6V-utZHzbE/Ukjn-1MDOSI/AAAAAAAAA3g/H6Qcw1zt4n0/s1600/2101_aa2cac09d1c6431b8a635d61cd9c4471.jpg
     """
 
-    pre_extender_image_urls = kwargs.get('extender_image_urls', [])
     now_extender_image_urls = []
 
     search_re = re.compile(r'/w\d+\-h\d+\-no/', re.IGNORECASE)
@@ -73,6 +79,6 @@ def googleusercontent_s1600_extender(pipeline_index, finder_image_urls, *args, *
                 now_extender_image_urls.append(extender_image_url)
 
     output = {}
-    output['extender_image_urls'] = pre_extender_image_urls + now_extender_image_urls
+    output['extender_image_urls'] = extender_image_urls + now_extender_image_urls
 
     return output
