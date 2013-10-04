@@ -19,6 +19,8 @@ on Mac OS X
 
     $ pip install haul
 
+Fail to install haul? `It is probably caused by lxml <http://lxml.de/installation.html>`_.
+
 Usage
 =====
 
