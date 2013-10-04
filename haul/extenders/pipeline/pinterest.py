@@ -3,7 +3,10 @@
 import re
 
 
-def original_image_extender(pipeline_index, finder_image_urls, *args, **kwargs):
+def original_image_extender(pipeline_index,
+                            finder_image_urls,
+                            extender_image_urls=[],
+                            *args, **kwargs):
     """
     Example:
     http://media-cache-ec0.pinimg.com/70x/50/9b/bd/509bbd5c6543d473bc2b49befe75f4c6.jpg
@@ -13,7 +16,6 @@ def original_image_extender(pipeline_index, finder_image_urls, *args, **kwargs):
     http://media-cache-ec0.pinimg.com/originals/50/9b/bd/509bbd5c6543d473bc2b49befe75f4c6.jpg
     """
 
-    pre_extender_image_urls = kwargs.get('extender_image_urls', [])
     now_extender_image_urls = []
 
     search_re = re.compile(r'.com/\d+x/', re.IGNORECASE)
@@ -25,6 +27,6 @@ def original_image_extender(pipeline_index, finder_image_urls, *args, **kwargs):
                 now_extender_image_urls.append(extender_image_url)
 
     output = {}
-    output['extender_image_urls'] = pre_extender_image_urls + now_extender_image_urls
+    output['extender_image_urls'] = extender_image_urls + now_extender_image_urls
 
     return output
