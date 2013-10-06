@@ -1,4 +1,3 @@
-====
 Haul
 ====
 
@@ -19,6 +18,8 @@ on Mac OS X
 .. code-block:: bash
 
     $ pip install haul
+
+Fail to install haul? `It is probably caused by lxml <http://lxml.de/installation.html>`_.
 
 Usage
 =====
@@ -123,7 +124,7 @@ Custom finder / extender pipeline:
     result = h.find_images(url, extend=True)
 
 Run Tests
----------
+=========
 
 .. code-block:: bash
 
