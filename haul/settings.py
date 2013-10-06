@@ -3,6 +3,11 @@
 # http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser
 DEFAULT_PARSER = 'lxml'
 
+ALLOWED_CONTENT_TYPES = [
+    'text/html',
+    'image/',
+]
+
 FINDER_PIPELINE = (
     'haul.finders.pipeline.html.img_src_finder',
     'haul.finders.pipeline.html.a_href_finder',

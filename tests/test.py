@@ -24,7 +24,6 @@ class HaulBaseTestCase(unittest.TestCase):
 
         self.image_url = 'http://files.heelsfetishism.com/media/heels/2013/09/01/16576_3ce9d1b8c1744319837bab454ed10f0d.jpg'
         self.image_url_with_querysting = 'http://files.heelsfetishism.com/media/heels/2013/08/20/2070_566cf1cd44fd4692aa6cca9b3408a97d.jpg?q=test'
-        self.image_url_with_hashtag = 'http://files.heelsfetishism.com/media/heels/2013/08/20/2070_566cf1cd44fd4692aa6cca9b3408a97d.jpg#test'
 
         self.amazon_url = 'http://www.amazon.com/dp/B00C67CRRE/'
         self.blogspot_url = 'http://atlantic-pacific.blogspot.tw/2013/09/formulaic-dressing.html'
@@ -39,6 +38,7 @@ class HaulBaseTestCase(unittest.TestCase):
         self.wordpress_url = 'http://www.wendyslookbook.com/2013/09/morning-coffee-run-tweed-jacket-watermark-plaid/'
         self.wordpress_image_url = 'http://www.wendyslookbook.com/wp-content/uploads/2013/09/Morning-Coffee-Run-7-433x650.jpg'
 
+        self.not_exist_url = 'http://domain-not-exist-123.com/'
         self.broken_url = 'http://heelsfetishism.com/404/not/found/'
         self.not_supported_url = 'https://www.youtube.com/audiolibrary_download?vid=463864fcafcbc5bc'
 
@@ -202,6 +202,9 @@ class ExceptionsTestCase(HaulBaseTestCase):
 
     def test_retrieve_error(self):
         h = Haul()
+
+        with self.assertRaises(exceptions.RetrieveError):
+            h.find_images(self.not_exist_url)
 
         with self.assertRaises(exceptions.RetrieveError):
             h.find_images(self.broken_url)
