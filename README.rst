@@ -1,3 +1,7 @@
+.. image:: https://d2weczhvl823v0.cloudfront.net/vinta/haul/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+
 Haul
 ====
 
@@ -130,9 +134,3 @@ Run Tests
 
     $ cd tests
     $ python test.py
-
-
-.. image:: https://d2weczhvl823v0.cloudfront.net/vinta/haul/trend.png
-   :alt: Bitdeli badge
-   :target: https://bitdeli.com/free
-
