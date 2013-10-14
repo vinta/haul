@@ -1,6 +1,10 @@
 Haul
 ====
 
+.. image:: https://badge.fury.io/py/haul.png
+    :alt: Version Badge
+    :target: http://badge.fury.io/py/haul
+
 Find thumbnails and original images from URL or HTML file.
 
 Installation
@@ -132,5 +136,5 @@ Run Tests
     $ python test.py
 
 .. image:: https://d2weczhvl823v0.cloudfront.net/vinta/haul/trend.png
-   :alt: Bitdeli badge
-   :target: https://bitdeli.com/free
+    :alt: Bitdeli Badge
+    :target: https://bitdeli.com/free
