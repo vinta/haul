@@ -5,6 +5,11 @@ Haul
     :alt: Version Badge
     :target: http://badge.fury.io/py/haul
 
+.. image:: https://d2weczhvl823v0.cloudfront.net/vinta/haul/trend.png
+    :alt: Bitdeli Badge
+    :target: https://bitdeli.com/free
+
+
 Find thumbnails and original images from URL or HTML file.
 
 Installation
@@ -134,7 +139,3 @@ Run Tests
 
     $ cd tests
     $ python test.py
-
-.. image:: https://d2weczhvl823v0.cloudfront.net/vinta/haul/trend.png
-    :alt: Bitdeli Badge
-    :target: https://bitdeli.com/free
