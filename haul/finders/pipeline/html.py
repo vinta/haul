@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from haul.utils import in_ignorecase
+from ...compat import str
 
 
 def img_src_finder(pipeline_index,
@@ -16,8 +16,9 @@ def img_src_finder(pipeline_index,
     for img in soup.find_all('img'):
         src = img.get('src', None)
         if src:
-            if (not in_ignorecase(src, finder_image_urls)) and \
-               (not in_ignorecase(src, now_finder_image_urls)):
+            src = str(src)
+            if (src not in finder_image_urls) and \
+               (src not in now_finder_image_urls):
                 now_finder_image_urls.append(src)
 
     output = {}
@@ -39,9 +40,10 @@ def a_href_finder(pipeline_index,
     for a in soup.find_all('a'):
         href = a.get('href', None)
         if href:
+            href = str(href)
             if filter(href.lower().endswith, ('.jpg', '.jpeg', '.gif', '.png')):
-                if (not in_ignorecase(href, finder_image_urls)) and \
-                   (not in_ignorecase(href, now_finder_image_urls)):
+              if (href not in finder_image_urls) and \
+                 (href not in now_finder_image_urls):
                     now_finder_image_urls.append(href)
 
     output = {}

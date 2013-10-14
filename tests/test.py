@@ -56,7 +56,7 @@ class FindImagesFromHTMLTestCase(HaulBaseTestCase):
 
         image_urls = hr.image_urls
         image_urls_count = len(image_urls)
-        self.assertEqual(image_urls_count, 5)
+        self.assertEqual(image_urls_count, 6)
 
     def test_find_html_fragment(self):
         h = Haul()
@@ -66,7 +66,7 @@ class FindImagesFromHTMLTestCase(HaulBaseTestCase):
 
         image_urls = hr.image_urls
         image_urls_count = len(image_urls)
-        self.assertEqual(image_urls_count, 5)
+        self.assertEqual(image_urls_count, 6)
 
 
 class FindImagesFromURLTestCase(HaulBaseTestCase):
@@ -151,7 +151,7 @@ class CustomFinderPipelineTestCase(HaulBaseTestCase):
         super(CustomFinderPipelineTestCase, self).setUp()
 
     def test_find_html_document(self):
-        from haul.utils import in_ignorecase
+        from haul.compat import str
 
         def img_data_src_finder(pipeline_index,
                                 soup,
@@ -166,9 +166,8 @@ class CustomFinderPipelineTestCase(HaulBaseTestCase):
             for img in soup.find_all('img'):
                 src = img.get('data-src', None)
                 if src:
-                    if (not in_ignorecase(src, finder_image_urls)) and \
-                       (not in_ignorecase(src, now_finder_image_urls)):
-                        now_finder_image_urls.append(src)
+                    src = str(src)
+                    now_finder_image_urls.append(src)
 
             output = {}
             output['finder_image_urls'] = finder_image_urls + now_finder_image_urls
@@ -192,13 +191,20 @@ class CustomFinderPipelineTestCase(HaulBaseTestCase):
 
         image_urls = hr.image_urls
         image_urls_count = len(image_urls)
-        self.assertEqual(image_urls_count, 6)
+        self.assertEqual(image_urls_count, 7)
 
 
 class ExceptionsTestCase(HaulBaseTestCase):
 
     def setUp(self):
         super(ExceptionsTestCase, self).setUp()
+
+    def test_invalid_parameter_error(self):
+        h = Haul()
+
+        with self.assertRaises(exceptions.InvalidParameterError):
+            url_or_html = None
+            h.find_images(url_or_html)
 
     def test_retrieve_error(self):
         h = Haul()

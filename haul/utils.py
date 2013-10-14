@@ -23,10 +23,6 @@ def module_member(name):
     return getattr(module, member)
 
 
-def in_ignorecase(str_item, iterable):
-    return str_item.lower() in map(str.lower, iterable)
-
-
 def read_file(path):
     with open (path, 'r') as f:
         content = f.read()

@@ -89,7 +89,7 @@ Custom finder / extender pipeline:
 .. code-block:: python
 
     from haul import Haul
-    from haul.utils import in_ignorecase
+    from haul.compat import str
 
 
     def img_data_src_finder(pipeline_index,
@@ -105,9 +105,8 @@ Custom finder / extender pipeline:
         for img in soup.find_all('img'):
             src = img.get('data-src', None)
             if src:
-                if (not in_ignorecase(src, finder_image_urls)) and \
-                   (not in_ignorecase(src, now_finder_image_urls)):
-                    now_finder_image_urls.append(src)
+                src = str(src)
+                now_finder_image_urls.append(src)
 
         output = {}
         output['finder_image_urls'] = finder_image_urls + now_finder_image_urls

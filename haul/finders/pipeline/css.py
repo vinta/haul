@@ -2,8 +2,6 @@
 
 import cssutils
 
-from haul.utils import in_ignorecase
-
 
 def background_image_finder(pipeline_index,
                             soup,
@@ -29,8 +27,8 @@ def background_image_finder(pipeline_index,
                 for property_value in background_image.propertyValue:
                     background_image_url = str(property_value.value)
                     if background_image_url:
-                        if (not in_ignorecase(background_image_url, finder_image_urls)) and \
-                           (not in_ignorecase(background_image_url, now_finder_image_urls)):
+                        if (background_image_url not in finder_image_urls) and \
+                           (background_image_url not in now_finder_image_urls):
                             now_finder_image_urls.append(background_image_url)
 
     output = {}

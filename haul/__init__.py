@@ -3,4 +3,4 @@
 __version__ = '1.2.0'
 
 from .api import find_images
-from .models import Haul, HaulResult
+from .core import Haul, HaulResult

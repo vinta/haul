@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from .models import Haul
+from .core import Haul
 
 
 def find_images(url_or_html, *args, **kwargs):

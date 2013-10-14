@@ -23,3 +23,5 @@ EXTENDER_PIPELINE = (
     'haul.extenders.pipeline.tumblr.media_1280_extender',
     'haul.extenders.pipeline.tumblr.avatar_128_extender',
 )
+
+SHOULD_JOIN_URL = True
