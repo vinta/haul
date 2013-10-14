@@ -8,6 +8,20 @@ This module contains the set of Haul's exceptions.
 """
 
 
+class InvalidParameterError(Exception):
+    """
+    Invalid Parameter
+    """
+
+    def __init__(self, message):
+        Exception.__init__(self)
+
+        self.message = message
+
+    def __repr__(self):
+        return '<InvalidParameterError [message: %s]>' % (self.message)
+
+
 class RetrieveError(RuntimeError):
     """
     Connection fail or HTTP status code >= 400
@@ -24,7 +38,7 @@ class RetrieveError(RuntimeError):
 
 class ContentTypeNotSupported(Exception):
     """
-    Support: `text/html` and `image/`
+    ref: settings.ALLOWED_CONTENT_TYPES
     """
 
     def __init__(self, content_type):

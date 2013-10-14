@@ -150,7 +150,12 @@ class Haul(object):
         url = None
         content = None
 
-        if simple_url_re.match(url_or_html):
+        try:
+            is_url = simple_url_re.match(url_or_html)
+        except TypeError:
+            raise exceptions.InvalidParameterError('Should be a URL or HTML text')
+
+        if is_url:
             url = url_or_html
             content_type, content = self.retrieve_url(url)
         else:
