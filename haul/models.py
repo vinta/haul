@@ -46,10 +46,13 @@ class Haul(object):
         Use requests to fetch remote content
         """
 
-        r = requests.get(url)
+        try:
+            r = requests.get(url)
+        except requests.ConnectionError:
+            raise exceptions.RetrieveError('Connection fail')
 
         if r.status_code >= 400:
-            raise exceptions.RetrieveError(r.status_code)
+            raise exceptions.RetrieveError('Connected, but status code is %s' % (r.status_code))
 
         real_url = r.url
         content = r.content
@@ -147,7 +150,12 @@ class Haul(object):
         url = None
         content = None
 
-        if simple_url_re.match(url_or_html):
+        try:
+            is_url = simple_url_re.match(url_or_html)
+        except TypeError:
+            raise exceptions.InvalidParameterError('Should be a URL or HTML text')
+
+        if is_url:
             url = url_or_html
             content_type, content = self.retrieve_url(url)
         else:
