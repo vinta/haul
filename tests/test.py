@@ -1,24 +1,26 @@
 # coding: utf-8
 
+import os
 import sys
-sys.path.insert(0, '..')
+HAUL_ROOT = os.path.abspath(os.path.join(__file__, '../../'))
+TESTS_DIR = os.path.abspath(os.path.join(__file__, '../'))
+sys.path.insert(0, HAUL_ROOT)
 
 import unittest
 
-from haul import Haul, HaulResult
-from haul import exceptions
+from haul import Haul, HaulResult, exceptions
 from haul.utils import pp, read_file
 
 
 class HaulBaseTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.complete_html = read_file('fixtures/page.html')
-        self.fragmented_html = read_file('fixtures/fragment.html')
+        self.complete_html = read_file(os.path.join(TESTS_DIR, 'fixtures/page.html'))
+        self.fragmented_html = read_file(os.path.join(TESTS_DIR, 'fixtures/fragment.html'))
 
-        self.blogspot_html = read_file('fixtures/blogspot.html')
-        self.tumblr_html = read_file('fixtures/tumblr.html')
-        self.wordpress_html = read_file('fixtures/wordpress.html')
+        self.blogspot_html = read_file(os.path.join(TESTS_DIR, 'fixtures/blogspot.html'))
+        self.tumblr_html = read_file(os.path.join(TESTS_DIR, 'fixtures/tumblr.html'))
+        self.wordpress_html = read_file(os.path.join(TESTS_DIR, 'fixtures/wordpress.html'))
 
         self.webpage_url = 'http://vinta.ws/blog/529'
 
