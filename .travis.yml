@@ -9,6 +9,7 @@ before_install:
 
 install:
   - pip install -r requirements.txt --use-mirrors
+  - pip install -r requirements_test.txt --use-mirrors
 
 script:
   - coverage run --source=haul tests/test.py
@@ -16,3 +17,6 @@ script:
 notifications:
   email:
     - vinta.chen@gmail.com
+
+after_success:
+  - coveralls

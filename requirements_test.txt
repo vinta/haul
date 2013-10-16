@@ -1,0 +1,3 @@
+-r requirements.txt
+coverage==3.7
+coveralls==0.3
