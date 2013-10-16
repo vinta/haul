@@ -1,6 +1,14 @@
 Haul
 ====
 
+.. image:: https://travis-ci.org/vinta/Haul.png?branch=master
+    :alt: Build Badge
+    :target: https://travis-ci.org/vinta/Haul
+
+.. image:: https://coveralls.io/repos/vinta/Haul/badge.png?branch=master
+    :alt: Coverage Badge
+    :target: https://coveralls.io/r/vinta/Haul
+
 .. image:: https://badge.fury.io/py/haul.png
     :alt: Version Badge
     :target: http://badge.fury.io/py/haul
