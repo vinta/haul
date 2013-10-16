@@ -6,5 +6,8 @@ dist
 build
 sdist
 
+.coverage
+htmlcov/
+
 .codeintel
 .DS_STORE
