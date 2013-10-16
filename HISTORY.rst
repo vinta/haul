@@ -5,6 +5,9 @@ History
 ++++++++++++++++++
 
 - Use unicode for every string
+- Fix running test.py from another directory
+- Rename module `models` to `core`
+- Remove in_ignorecase()
 
 
 1.2.0 (2013-10-15)
