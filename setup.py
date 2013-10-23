@@ -31,7 +31,7 @@ packages = [
 
 setup(
     name='haul',
-    version='1.3.0',
+    version='1.3.1',
     description='An Extensible Image Crawler',
     long_description=long_description,
     keywords='haul web image content scraper parser crawler',

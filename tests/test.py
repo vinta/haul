@@ -16,6 +16,7 @@ class HaulBaseTestCase(unittest.TestCase):
 
     def setUp(self):
         self.complete_html = read_file(os.path.join(TESTS_DIR, 'fixtures/page.html'))
+        self.no_image_html = read_file(os.path.join(TESTS_DIR, 'fixtures/no_image_page.html'))
         self.fragmented_html = read_file(os.path.join(TESTS_DIR, 'fixtures/fragment.html'))
 
         self.blogspot_html = read_file(os.path.join(TESTS_DIR, 'fixtures/blogspot.html'))
@@ -43,6 +44,24 @@ class HaulBaseTestCase(unittest.TestCase):
         self.not_exist_url = 'http://domain-not-exist-123.com/'
         self.broken_url = 'http://heelsfetishism.com/404/not/found/'
         self.not_supported_url = 'https://www.youtube.com/audiolibrary_download?vid=463864fcafcbc5bc'
+
+
+class HaulResultTestCase(HaulBaseTestCase):
+
+    def setUp(self):
+        super(HaulResultTestCase, self).setUp()
+
+    def test_is_found_true(self):
+        h = Haul()
+        hr = h.find_images(self.complete_html)
+
+        self.assertTrue(hr.is_found)
+
+    def test_is_found_false(self):
+        h = Haul()
+        hr = h.find_images(self.no_image_html)
+
+        self.assertFalse(hr.is_found)
 
 
 class FindImagesFromHTMLTestCase(HaulBaseTestCase):

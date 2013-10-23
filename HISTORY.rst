@@ -1,6 +1,14 @@
 History
 =======
 
+1.3.1 (2013-10-24)
+++++++++++++++++++
+
+- Add `is_found` attribute for `HaulResult`
+- Add `to_ordered_dict()` method for `HaulResult`
+- `A demo site on Heroku <http://hauler.herokuapp.com/>`_
+
+
 1.3.0 (2013-10-16)
 ++++++++++++++++++
 

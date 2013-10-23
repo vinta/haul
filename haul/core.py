@@ -202,6 +202,10 @@ class HaulResult(object):
         return '<HaulResult [Content-Type: %s]>' % (self.content_type)
 
     @property
+    def is_found(self):
+        return True if len(self.finder_image_urls) > 0 else False
+
+    @property
     def image_urls(self):
         """
         Combine finder_image_urls and extender_image_urls,
