@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from collections import OrderedDict
 import mimetypes
 import re
 
@@ -191,8 +192,8 @@ class HaulResult(object):
     """
 
     def __init__(self):
-        self.content_type = None
         self.url = None
+        self.content_type = None
         self.title = None
         self.finder_image_urls = []
         self.extender_image_urls = []
@@ -216,3 +217,18 @@ class HaulResult(object):
 
     def to_dict(self):
         return self.__dict__
+
+    def to_ordered_dict(self):
+        order_keys = (
+            'url',
+            'content_type',
+            'title',
+            'finder_image_urls',
+            'extender_image_urls',
+        )
+
+        d = OrderedDict()
+        for key in order_keys:
+            d[key] = getattr(self, key)
+
+        return d
