@@ -20,6 +20,11 @@ Haul
 
 Find thumbnails and original images from URL or HTML file.
 
+Demo
+====
+
+`Demo on Heroku <http://hauler.herokuapp.com/>`_
+
 Installation
 ============
 
