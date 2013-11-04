@@ -1,15 +1,13 @@
 # coding: utf-8
 
 import os
-import sys
-HAUL_ROOT = os.path.abspath(os.path.join(__file__, '../../'))
-TESTS_DIR = os.path.abspath(os.path.join(__file__, '../'))
-sys.path.insert(0, HAUL_ROOT)
-
 import unittest
 
 from haul import Haul, HaulResult, exceptions
-from haul.utils import pp, read_file
+from haul.utils import read_file
+
+
+TESTS_DIR = os.path.abspath(os.path.join(__file__, '../'))
 
 
 class HaulBaseTestCase(unittest.TestCase):
@@ -244,5 +242,4 @@ class ExceptionsTestCase(HaulBaseTestCase):
 
 
 if __name__ == '__main__':
-    print('testing Haul')
     unittest.main()

@@ -1,13 +1,7 @@
 # coding: utf-8
 
 import cStringIO
-import pprint
 import sys
-
-
-def pp(something):
-    printer = pprint.PrettyPrinter(indent=2)
-    printer.pprint(something)
 
 
 def import_module(name):
