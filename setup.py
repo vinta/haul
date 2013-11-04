@@ -3,8 +3,6 @@
 import os
 import sys
 
-from pip.req import parse_requirements
-
 try:
     from setuptools import setup
 except ImportError:
@@ -19,7 +17,8 @@ long_description = open('README.rst').read() + '\n\n' + open('HISTORY.rst').read
 
 license = open('LICENSE').read()
 
-install_requires = [str(item.req) for item in parse_requirements('requirements.txt')]
+requirements_lines = [line.strip() for line in open('requirements.txt').readlines()]
+install_requires = list(filter(None, requirements_lines))
 
 packages = [
     'haul',
@@ -31,7 +30,7 @@ packages = [
 
 setup(
     name='haul',
-    version='1.3.1',
+    version='1.3.2',
     description='An Extensible Image Crawler',
     long_description=long_description,
     keywords='haul web image content scraper parser crawler',
