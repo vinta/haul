@@ -7,7 +7,7 @@ Haul
 
 .. image:: https://coveralls.io/repos/vinta/Haul/badge.png?branch=master
     :alt: Coverage Badge
-    :target: https://coveralls.io/r/vinta/Haul
+    :target: https://coveralls.io/r/vinta/Haul?branch=master
 
 .. image:: https://badge.fury.io/py/haul.png
     :alt: Version Badge
