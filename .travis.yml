@@ -12,7 +12,7 @@ install:
   - pip install -r requirements_test.txt --use-mirrors
 
 script:
-  - coverage run --source=haul tests/test.py
+  - coverage run --source=haul setup.py test
 
 notifications:
   email:
