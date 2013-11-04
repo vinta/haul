@@ -149,5 +149,4 @@ Run Tests
 
 .. code-block:: bash
 
-    $ cd tests
-    $ python test.py
+    $ python setup.py test

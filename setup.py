@@ -41,6 +41,7 @@ setup(
     install_requires=install_requires,
     include_package_data=True,
     packages=packages,
+    test_suite='tests',
     zip_safe=False,
     classifiers=(
         'Development Status :: 3 - Alpha',
