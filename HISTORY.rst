@@ -5,6 +5,7 @@ History
 ++++++++++++++++++
 
 - Bug fixed: `#12 <https://github.com/vinta/Haul/issues/12>`_
+- Support running tests with `python setup.py test`
 
 
 1.3.1 (2013-10-24)
