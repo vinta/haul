@@ -3,7 +3,14 @@
 import os
 import unittest
 
-from haul import Haul, HaulResult, exceptions
+import sys
+HAUL_ROOT = os.path.abspath(os.path.join(__file__, '../../'))
+sys.path.insert(0, HAUL_ROOT)
+
+from haul import Haul
+from haul import HaulResult
+from haul import exceptions
+from haul import utils
 from haul.utils import read_file
 
 
@@ -42,6 +49,39 @@ class HaulBaseTestCase(unittest.TestCase):
         self.not_exist_url = 'http://domain-not-exist-123.com/'
         self.broken_url = 'http://heelsfetishism.com/404/not/found/'
         self.not_supported_url = 'https://www.youtube.com/audiolibrary_download?vid=463864fcafcbc5bc'
+
+
+class HaulUtilsTestCase(HaulBaseTestCase):
+
+    def setUp(self):
+        super(HaulUtilsTestCase, self).setUp()
+
+    def test_is_url(self):
+        true_urls = [
+            'http://heelsfetishism.com/',
+            'http://heelsfetishism.com/?q=123',
+            'http://heelsfetishism.com/heels/20011/',
+            'http://heelsfetishism.com/from/vimeo.com/',
+            'http://stackoverflow.com/questions/7160737/python-how-to-validate-a-url-in-python-malformed-or-not',
+            'https://twitter.com/vinta',
+            '//files.heelsfetishism.com/media/heels/2013/10/29/18953_c62b070a4e98479998c3ab613a3be0a1.jpg',
+        ]
+        for url in true_urls:
+            self.assertTrue(utils.is_url(url))
+
+        false_urls = [
+            'google',
+            'google.com',
+            'google.com/image.jpg', # TODO: this one should be True
+        ]
+        for url in false_urls:
+            self.assertFalse(utils.is_url(url))
+
+    def test_normalize_url(self):
+        url = '//files.heelsfetishism.com/media/heels/2013/10/25/18510_6543374da5da4008908eaee2a07bbada.jpg'
+        new_url = utils.normalize_url(url)
+
+        self.assertEqual(new_url, 'http://files.heelsfetishism.com/media/heels/2013/10/25/18510_6543374da5da4008908eaee2a07bbada.jpg')
 
 
 class HaulResultTestCase(HaulBaseTestCase):
@@ -113,6 +153,27 @@ class FindImagesFromURLTestCase(HaulBaseTestCase):
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('image/', hr.content_type)
+
+
+class FinderPipelineTestCase(HaulBaseTestCase):
+
+    def setUp(self):
+        super(FinderPipelineTestCase, self).setUp()
+
+    def test_background_finder(self):
+        FINDER_PIPELINE = (
+            'haul.finders.pipeline.css.background_finder',
+        )
+
+        h = Haul(finder_pipeline=FINDER_PIPELINE)
+        hr = h.find_images(self.complete_html)
+
+        self.assertIsInstance(hr, HaulResult)
+        self.assertIn('text/html', hr.content_type)
+
+        image_urls = hr.image_urls
+        image_urls_count = len(image_urls)
+        self.assertEqual(image_urls_count, 2)
 
 
 class ExtenderPipelineTestCase(HaulBaseTestCase):
