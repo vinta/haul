@@ -2,6 +2,42 @@
 
 import cssutils
 
+from haul import utils
+
+
+def background_finder(pipeline_index,
+                      soup,
+                      finder_image_urls=[],
+                      *args, **kwargs):
+    """
+    Find image URL in background-image
+
+    Example:
+    <div style="background: #ffffff url('http://files.heelsfetishism.com/media/heels/2013/11/07/19822_eb071c1a5eb643818f6faa02f55b408f.jpg') no-repeat right top;" class="Image iLoaded iWithTransition Frame" src="http://distilleryimage10.ak.instagram.com/bde04558a43b11e28e5d22000a1f979a_7.jpg"></div>
+    to
+    http://distilleryimage10.ak.instagram.com/bde04558a43b11e28e5d22000a1f979a_7.jpg
+    """
+
+    now_finder_image_urls = []
+
+    for tag in soup.find_all(style=True):
+        style_string = tag['style']
+        if 'background' in style_string.lower():
+            style = cssutils.parseStyle(style_string)
+            background = style.getProperty('background')
+            if background:
+                for property_value in background.propertyValue:
+                    background_image_url = str(property_value.value)
+                    if utils.is_url(background_image_url):
+                        if (background_image_url not in finder_image_urls) and \
+                           (background_image_url not in now_finder_image_urls):
+                            now_finder_image_urls.append(background_image_url)
+
+    output = {}
+    output['finder_image_urls'] = finder_image_urls + now_finder_image_urls
+
+    return output
+
 
 def background_image_finder(pipeline_index,
                             soup,

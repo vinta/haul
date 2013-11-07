@@ -3,10 +3,6 @@
 import os
 import unittest
 
-import sys
-HAUL_ROOT = os.path.abspath(os.path.join(__file__, '../../'))
-sys.path.insert(0, HAUL_ROOT)
-
 from haul import Haul
 from haul import HaulResult
 from haul import exceptions
@@ -62,17 +58,20 @@ class HaulUtilsTestCase(HaulBaseTestCase):
             'http://heelsfetishism.com/?q=123',
             'http://heelsfetishism.com/heels/20011/',
             'http://heelsfetishism.com/from/vimeo.com/',
+            'http://s3-ap-northeast-1.amazonaws.com/files.heelsfetishism.com/中文.png',
             'http://stackoverflow.com/questions/7160737/python-how-to-validate-a-url-in-python-malformed-or-not',
             'https://twitter.com/vinta',
-            '//files.heelsfetishism.com/media/heels/2013/10/29/18953_c62b070a4e98479998c3ab613a3be0a1.jpg',
+            'google.com',
+            'google.com/image.jpg',
         ]
         for url in true_urls:
             self.assertTrue(utils.is_url(url))
 
         false_urls = [
             'google',
-            'google.com',
-            'google.com/image.jpg', # TODO: this one should be True
+            'path/to/dead/',
+            '/another/path/to/dead/',
+            '//files.heelsfetishism.com/media/heels/2013/10/29/18953_c62b070a4e98479998c3ab613a3be0a1.jpg',
         ]
         for url in false_urls:
             self.assertFalse(utils.is_url(url))
