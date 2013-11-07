@@ -7,7 +7,9 @@ import re
 from bs4 import BeautifulSoup
 import requests
 
-from . import exceptions, settings, utils
+from . import exceptions
+from . import settings
+from . import utils
 
 
 simple_url_re = re.compile(r'^https?://\[?\w', re.IGNORECASE)
