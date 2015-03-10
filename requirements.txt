@@ -2,4 +2,4 @@ beautifulsoup4>=4.2.0
 cssutils>=0.9.10
 html5lib>=0.99
 lxml
-requests>=1.2.3
+requests
