@@ -1,4 +1,4 @@
-FROM vinta/python:2.7.apt
+FROM vinta/python:2.7
 
 MAINTAINER Vinta Chen <vinta.chen@gmail.com>
 
