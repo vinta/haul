@@ -1,24 +1,19 @@
 Haul
 ====
 
-.. image:: https://travis-ci.org/vinta/Haul.png?branch=master
+.. image:: http://img.shields.io/travis/vinta/Haul.svg?style=flat-square
     :alt: Build Badge
     :target: https://travis-ci.org/vinta/Haul
 
-.. image:: https://coveralls.io/repos/vinta/Haul/badge.png?branch=master
+.. image:: http://img.shields.io/coveralls/vinta/Haul.svg?style=flat-square
     :alt: Coverage Badge
     :target: https://coveralls.io/r/vinta/Haul?branch=master
 
-.. image:: https://badge.fury.io/py/haul.png
+.. image:: https://img.shields.io/pypi/v/haul.svg?style=flat-square
     :alt: Version Badge
-    :target: http://badge.fury.io/py/haul
+    :target: https://pypi.python.org/pypi/haul
 
-.. image:: https://d2weczhvl823v0.cloudfront.net/vinta/haul/trend.png
-    :alt: Bitdeli Badge
-    :target: https://bitdeli.com/free
-
-
-Find thumbnails and original images from URL or HTML file.
+Haul is an extensible web crawler for extracting URLs of thumbnails and **original images** from any web page.
 
 Demo
 ====
@@ -39,9 +34,10 @@ on Mac OS X
 
 .. code-block:: bash
 
+    $ brew install libxml2 libxslt
     $ pip install haul
 
-Fail to install haul? `It is probably caused by lxml <http://lxml.de/installation.html>`_.
+Is there a problem during installation? `It's probably caused by lxml. <http://lxml.de/installation.html>`_
 
 Usage
 =====
@@ -97,7 +93,36 @@ Find original (or bigger size) images with ``extend=True``:
 Advanced Usage
 ==============
 
-Custom finder / extender pipeline:
+There are two key concepts that are presented as pure Python functions in Haul: the `Extractor` and the `Extender`.
+
+- **Extractors** are responsible for extracting image URLs from web pages.
+- **Extenders** are used for extending URLs with some predefined rules.
+
+Built-in Extractors
+-------------------
+
+``haul.finders.pipeline.html.img_src_finder``
++++++++++++++++++++++++++++++++++++++++++++
+
+Extracting image URLs from every ``<img src="value">`` in web pages.
+
+``haul.finders.pipeline.html.a_href_finder``
+++++++++++++++++++++++++++++++++++++++++++
+
+Extracting image URLs from every ``<a href="value">`` in web pages.
+
+``haul.finders.pipeline.css.background_image_finder``
++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Extracting image URLs from every ``background-image: value`` or ``background: value``  in CSS.
+
+Built-in Extenders
+------------------
+
+123
+
+Custom finder or extender pipeline
+----------------------------------
 
 .. code-block:: python
 
