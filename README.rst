@@ -93,33 +93,36 @@ Find original (or bigger size) images with ``extend=True``:
 Advanced Usage
 ==============
 
-There are two key concepts that are presented as pure Python functions in Haul: the `Extractor` and the `Extender`.
+There are two key concepts that are represented as pure Python functions in Haul: the Extractor and the Derivers.
 
 - **Extractors** are responsible for extracting image URLs from web pages.
-- **Extenders** are used for extending URLs with some predefined rules.
+- **Derivers** are used for deriving different sized image URLs that are collected by Extractors from contexts and predefined rules.
 
 Built-in Extractors
 -------------------
 
 ``haul.finders.pipeline.html.img_src_finder``
-+++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++
 
 Extracting image URLs from every ``<img src="value">`` in web pages.
 
 ``haul.finders.pipeline.html.a_href_finder``
-++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
 
 Extracting image URLs from every ``<a href="value">`` in web pages.
 
 ``haul.finders.pipeline.css.background_image_finder``
-+++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Extracting image URLs from every ``background-image: value`` or ``background: value``  in CSS.
+Extracting image URLs from every ``background-image: value`` or ``background: value``  in CSS files.
 
-Built-in Extenders
-------------------
+Built-in Derivers
+-----------------
 
-123
+``haul.derivers.pipeline.wordpress.original_image_deriver``
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Deriving original sized image URLs of WordPress from thumbnail URLs.
 
 Custom finder or extender pipeline
 ----------------------------------
