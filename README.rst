@@ -2,15 +2,15 @@ Haul
 ====
 
 .. image:: http://img.shields.io/travis/vinta/Haul.svg?style=flat-square
-    :alt: Build Badge
     :target: https://travis-ci.org/vinta/Haul
 
 .. image:: http://img.shields.io/coveralls/vinta/Haul.svg?style=flat-square
-    :alt: Coverage Badge
     :target: https://coveralls.io/r/vinta/Haul?branch=master
 
+.. image:: https://landscape.io/github/vinta/Haul/master/landscape.svg?style=flat-square
+    :target: https://landscape.io/github/vinta/pangu.py/master
+
 .. image:: https://img.shields.io/pypi/v/haul.svg?style=flat-square
-    :alt: Version Badge
     :target: https://pypi.python.org/pypi/haul
 
 Haul is an extensible web crawler for extracting URLs of thumbnails and **original images** from any web page.
