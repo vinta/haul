@@ -135,22 +135,22 @@ Custom Pipeline
 
     def img_data_src_finder(pipeline_index,
                             soup,
-                            finder_image_urls=[],
+                            extractor_image_urls=[],
                             *args, **kwargs):
         """
         Find image URL in <img>'s data-src attribute
         """
 
-        now_finder_image_urls = []
+        now_extractor_image_urls = []
 
         for img in soup.find_all('img'):
             src = img.get('data-src', None)
             if src:
                 src = str(src)
-                now_finder_image_urls.append(src)
+                now_extractor_image_urls.append(src)
 
         output = {}
-        output['finder_image_urls'] = finder_image_urls + now_finder_image_urls
+        output['extractor_image_urls'] = extractor_image_urls + now_extractor_image_urls
 
         return output
 

@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from __future__ import unicode_literals
+
 from collections import OrderedDict
 import mimetypes
 import re
@@ -111,13 +113,13 @@ class Haul(object):
         pipeline_output.pop('pipeline_break', None)
         pipeline_output.pop('soup', None)
 
-        self.result.finder_image_urls = pipeline_output.get('finder_image_urls', [])
+        self.result.extractor_image_urls = pipeline_output.get('extractor_image_urls', [])
 
         return self.result
 
     def start_derivator_pipeline(self, *args, **kwargs):
         pipeline_input = {
-            'finder_image_urls': self.result.finder_image_urls,
+            'extractor_image_urls': self.result.extractor_image_urls,
         }
         pipeline_output = pipeline_input.copy()
 
@@ -141,9 +143,9 @@ class Haul(object):
         # remove unnecessary items
         pipeline_output.pop('pipeline_index', None)
         pipeline_output.pop('pipeline_break', None)
-        pipeline_output.pop('finder_image_urls', None)
+        pipeline_output.pop('extractor_image_urls', None)
 
-        self.result.extender_image_urls = pipeline_output.get('extender_image_urls', [])
+        self.result.derivator_image_urls = pipeline_output.get('derivator_image_urls', [])
 
         return self.result
 
@@ -173,7 +175,7 @@ class Haul(object):
             if derive:
                 self.start_derivator_pipeline()
         elif 'image/' in content_type:
-            self.result.finder_image_urls = [str(self.response.url), ]
+            self.result.extractor_image_urls = [str(self.response.url), ]
             if derive:
                 self.start_derivator_pipeline()
         else:
@@ -191,25 +193,25 @@ class HaulResult(object):
         self.url = None
         self.content_type = None
         self.title = None
-        self.finder_image_urls = []
-        self.extender_image_urls = []
+        self.extractor_image_urls = []
+        self.derivator_image_urls = []
 
     def __repr__(self):
         return '<HaulResult [Content-Type: %s]>' % (self.content_type)
 
     @property
     def is_found(self):
-        return True if len(self.finder_image_urls) > 0 else False
+        return True if len(self.extractor_image_urls) > 0 else False
 
     @property
     def image_urls(self):
         """
-        Combine finder_image_urls and extender_image_urls,
+        Combine extractor_image_urls and derivator_image_urls,
         remove duplicate but keep order
         """
 
-        all_image_urls = self.finder_image_urls[:]
-        for image_url in self.extender_image_urls:
+        all_image_urls = self.extractor_image_urls[:]
+        for image_url in self.derivator_image_urls:
             if image_url not in all_image_urls:
                 all_image_urls.append(image_url)
 
@@ -223,8 +225,8 @@ class HaulResult(object):
             'url',
             'content_type',
             'title',
-            'finder_image_urls',
-            'extender_image_urls',
+            'extractor_image_urls',
+            'derivator_image_urls',
         )
 
         d = OrderedDict()
