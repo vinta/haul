@@ -8,20 +8,20 @@ ALLOWED_CONTENT_TYPES = [
     'image/',
 ]
 
-FINDER_PIPELINE = (
-    'haul.finders.pipeline.html.img_src_finder',
-    'haul.finders.pipeline.html.a_href_finder',
-    'haul.finders.pipeline.css.background_image_finder',
+EXTRACTOR_PIPELINE = (
+    'haul.extractors.pipeline.html.img_src_finder',
+    'haul.extractors.pipeline.html.a_href_finder',
+    'haul.extractors.pipeline.css.background_image_finder',
 )
 
-EXTENDER_PIPELINE = (
-    'haul.extenders.pipeline.google.blogspot_s1600_extender',
-    'haul.extenders.pipeline.google.ggpht_s1600_extender',
-    'haul.extenders.pipeline.google.googleusercontent_s1600_extender',
-    'haul.extenders.pipeline.pinterest.original_image_extender',
-    'haul.extenders.pipeline.wordpress.original_image_extender',
-    'haul.extenders.pipeline.tumblr.media_1280_extender',
-    'haul.extenders.pipeline.tumblr.avatar_128_extender',
+DERIVATOR_PIPELINE = (
+    'haul.derivators.pipeline.google.blogspot_s1600_extender',
+    'haul.derivators.pipeline.google.ggpht_s1600_extender',
+    'haul.derivators.pipeline.google.googleusercontent_s1600_extender',
+    'haul.derivators.pipeline.pinterest.original_image_extender',
+    'haul.derivators.pipeline.wordpress.original_image_extender',
+    'haul.derivators.pipeline.tumblr.media_1280_extender',
+    'haul.derivators.pipeline.tumblr.avatar_128_extender',
 )
 
 SHOULD_JOIN_URL = True

@@ -37,8 +37,8 @@ class HaulBaseTestCase(unittest.TestCase):
         self.instagram_url = 'http://instagram.com/p/YC9A5JQdrS/'
         self.pinterest_url = 'http://www.pinterest.com/pin/237987161531161351/'
         self.pinterest_image_url = 'http://media-cache-ec0.pinimg.com/736x/50/9b/bd/509bbd5c6543d473bc2b49befe75f4c6.jpg'
-        self.tumblr_url = 'http://gibuloto.tumblr.com/post/62525699435/fuck-yeah'
-        self.tumblr_image_url = 'http://31.media.tumblr.com/e199758fc69df7554e64772e970b4fe0/tumblr_ms446vqoA21qbrjcdo1_500.jpg'
+        self.tumblr_url = 'http://gibuloto.tumblr.com/post/62857719067/from-heelsfetishism'
+        self.tumblr_image_url = 'http://40.media.tumblr.com/b71fcca6c9b9c6474a56965383bf3cad/tumblr_mu0nqfTg341rkkrkro1_500.jpg'
         self.wordpress_url = 'http://www.wendyslookbook.com/2013/09/morning-coffee-run-tweed-jacket-watermark-plaid/'
         self.wordpress_image_url = 'http://www.wendyslookbook.com/wp-content/uploads/2013/09/Morning-Coffee-Run-7-433x650.jpg'
 
@@ -160,11 +160,11 @@ class FinderPipelineTestCase(HaulBaseTestCase):
         super(FinderPipelineTestCase, self).setUp()
 
     def test_background_finder(self):
-        FINDER_PIPELINE = (
-            'haul.finders.pipeline.css.background_finder',
+        EXTRACTOR_PIPELINE = (
+            'haul.extractors.pipeline.css.background_finder',
         )
 
-        h = Haul(finder_pipeline=FINDER_PIPELINE)
+        h = Haul(extractor_pipeline=EXTRACTOR_PIPELINE)
         hr = h.find_images(self.complete_html)
 
         self.assertIsInstance(hr, HaulResult)
@@ -182,21 +182,21 @@ class ExtenderPipelineTestCase(HaulBaseTestCase):
 
     def test_blogspot(self):
         h = Haul()
-        hr = h.find_images(self.blogspot_html, extend=True)
+        hr = h.find_images(self.blogspot_html, derive=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('text/html', hr.content_type)
 
     def test_tumblr(self):
         h = Haul()
-        hr = h.find_images(self.tumblr_html, extend=True)
+        hr = h.find_images(self.tumblr_html, derive=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('text/html', hr.content_type)
 
     def test_pinterest_image_url(self):
         h = Haul()
-        hr = h.find_images(self.pinterest_image_url, extend=True)
+        hr = h.find_images(self.pinterest_image_url, derive=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('image/', hr.content_type)
@@ -207,7 +207,7 @@ class ExtenderPipelineTestCase(HaulBaseTestCase):
 
     def test_tumblr_image_url(self):
         h = Haul()
-        hr = h.find_images(self.tumblr_image_url, extend=True)
+        hr = h.find_images(self.tumblr_image_url, derive=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('image/', hr.content_type)
@@ -218,7 +218,7 @@ class ExtenderPipelineTestCase(HaulBaseTestCase):
 
     def test_wordpress(self):
         h = Haul()
-        hr = h.find_images(self.wordpress_html, extend=True)
+        hr = h.find_images(self.wordpress_html, derive=True)
 
         self.assertIsInstance(hr, HaulResult)
         self.assertIn('text/html', hr.content_type)
@@ -253,14 +253,14 @@ class CustomFinderPipelineTestCase(HaulBaseTestCase):
 
             return output
 
-        FINDER_PIPELINE = (
-            'haul.finders.pipeline.html.img_src_finder',
-            'haul.finders.pipeline.html.a_href_finder',
-            'haul.finders.pipeline.css.background_image_finder',
+        EXTRACTOR_PIPELINE = (
+            'haul.extractors.pipeline.html.img_src_finder',
+            'haul.extractors.pipeline.html.a_href_finder',
+            'haul.extractors.pipeline.css.background_image_finder',
             img_data_src_finder,
         )
 
-        h = Haul(finder_pipeline=FINDER_PIPELINE)
+        h = Haul(extractor_pipeline=EXTRACTOR_PIPELINE)
         hr = h.find_images(self.complete_html)
 
         self.assertIsInstance(hr, HaulResult)

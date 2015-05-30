@@ -22,10 +22,10 @@ install_requires = list(filter(None, requirements_lines))
 
 packages = [
     'haul',
-    'haul.finders',
-    'haul.finders.pipeline',
-    'haul.extenders',
-    'haul.extenders.pipeline',
+    'haul.extractors',
+    'haul.extractors.pipeline',
+    'haul.derivators',
+    'haul.derivators.pipeline',
 ]
 
 setup(

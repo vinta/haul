@@ -22,15 +22,15 @@ class Haul(object):
 
     def __init__(self,
                  parser=settings.DEFAULT_PARSER,
-                 finder_pipeline=settings.FINDER_PIPELINE,
-                 extender_pipeline=settings.EXTENDER_PIPELINE):
+                 extractor_pipeline=settings.EXTRACTOR_PIPELINE,
+                 derivator_pipeline=settings.DERIVATOR_PIPELINE):
 
         self.parser = parser
-        self.finder_pipeline = finder_pipeline
-        self.extender_pipeline = extender_pipeline
+        self.extractor_pipeline = extractor_pipeline
+        self.derivator_pipeline = derivator_pipeline
 
-        self.response = None # via Requests
-        self.soup = None # via BeautifulSoup
+        self.response = None  # via Requests
+        self.soup = None  # via BeautifulSoup
 
         self._result = None
 
@@ -76,21 +76,20 @@ class Haul(object):
         """
 
         soup = BeautifulSoup(html, self.parser)
+        self.soup = soup
 
         title_tag = soup.find('title')
         self.result.title = title_tag.string if title_tag else None
 
-        self.soup = soup
-
         return soup
 
-    def start_finder_pipeline(self, *args, **kwargs):
+    def start_extractor_pipeline(self, *args, **kwargs):
         pipeline_input = {
             'soup': self.soup,
         }
         pipeline_output = pipeline_input.copy()
 
-        for idx, name in enumerate(self.finder_pipeline):
+        for idx, name in enumerate(self.extractor_pipeline):
             pipeline_output['pipeline_index'] = idx
             pipeline_output['pipeline_break'] = False
 
@@ -116,13 +115,13 @@ class Haul(object):
 
         return self.result
 
-    def start_extender_pipeline(self, *args, **kwargs):
+    def start_derivator_pipeline(self, *args, **kwargs):
         pipeline_input = {
             'finder_image_urls': self.result.finder_image_urls,
         }
         pipeline_output = pipeline_input.copy()
 
-        for idx, name in enumerate(self.extender_pipeline):
+        for idx, name in enumerate(self.derivator_pipeline):
             pipeline_output['pipeline_index'] = idx
             pipeline_output['pipeline_break'] = False
 
@@ -149,7 +148,7 @@ class Haul(object):
         return self.result
 
     # API
-    def find_images(self, url_or_html, extend=False):
+    def find_images(self, url_or_html, derive=False):
         url = None
         content = None
 
@@ -170,18 +169,13 @@ class Haul(object):
 
         if 'text/html' in content_type:
             self.parse_html(content)
-
-            self.start_finder_pipeline()
-
-            if extend:
-                self.start_extender_pipeline()
-
+            self.start_extractor_pipeline()
+            if derive:
+                self.start_derivator_pipeline()
         elif 'image/' in content_type:
             self.result.finder_image_urls = [str(self.response.url), ]
-
-            if extend:
-                self.start_extender_pipeline()
-
+            if derive:
+                self.start_derivator_pipeline()
         else:
             raise exceptions.ContentTypeNotSupported(content_type)
 
@@ -190,7 +184,7 @@ class Haul(object):
 
 class HaulResult(object):
     """
-    Result of Haul
+    Retrieval result of Haul
     """
 
     def __init__(self):

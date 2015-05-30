@@ -101,31 +101,31 @@ There are two key concepts that are represented as pure Python functions in Haul
 Built-in Extractors
 -------------------
 
-``haul.finders.pipeline.html.img_src_finder``
-+++++++++++++++++++++++++++++++++++++++++++++
+``haul.extractors.pipeline.html.img_src_finder``
+++++++++++++++++++++++++++++++++++++++++++++++++
 
-Extracting image URLs from every ``<img src="value">`` in web pages.
+Extracting image URLs from every ``<img src="image_url">`` in web pages.
 
-``haul.finders.pipeline.html.a_href_finder``
-++++++++++++++++++++++++++++++++++++++++++++
+``haul.extractors.pipeline.html.a_href_finder``
++++++++++++++++++++++++++++++++++++++++++++++++
 
-Extracting image URLs from every ``<a href="value">`` in web pages.
+Extracting image URLs from every ``<a href="image_url">`` in web pages.
 
-``haul.finders.pipeline.css.background_image_finder``
-+++++++++++++++++++++++++++++++++++++++++++++++++++++
+``haul.extractors.pipeline.css.background_image_finder``
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Extracting image URLs from every ``background-image: value`` or ``background: value``  in CSS files.
+Extracting image URLs from every ``background-image: image_url`` or ``background: image_url``  in CSS files.
 
 Built-in Derivators
------------------
+-------------------
 
 ``haul.derivators.pipeline.wordpress.original_image_derivator``
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Deriving original sized image URLs of WordPress from thumbnail URLs.
 
-Custom finder or extender pipeline
-----------------------------------
+Custom Pipeline
+---------------
 
 .. code-block:: python
 
@@ -154,7 +154,7 @@ Custom finder or extender pipeline
 
         return output
 
-    MY_FINDER_PIPELINE = (
+    MY_EXTRACTOR_PIPELINE = (
         'haul.finders.pipeline.html.img_src_finder',
         'haul.finders.pipeline.css.background_image_finder',
         img_data_src_finder,
@@ -168,8 +168,8 @@ Custom finder or extender pipeline
 
     url = 'http://fashion-fever.nl/dressing-up/'
     h = Haul(parser='lxml',
-             finder_pipeline=MY_FINDER_PIPELINE,
-             extender_pipeline=GOOGLE_SITES_EXTENDER_PIEPLINE)
+             extractor_pipeline=MY_EXTRACTOR_PIPELINE,
+             derivator_pipeline=GOOGLE_SITES_EXTENDER_PIEPLINE)
     result = h.find_images(url, extend=True)
 
 Run Tests

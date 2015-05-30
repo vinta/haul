@@ -7,7 +7,6 @@ RUN apt-get update && \
     build-essential \
     libxml2-dev \
     libxslt1-dev \
-    libyaml-dev \
     zlib1g-dev && \
     rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
