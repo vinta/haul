@@ -2,49 +2,79 @@
 
 from __future__ import unicode_literals
 
-from collections import OrderedDict
 import mimetypes
-import re
 
 from bs4 import BeautifulSoup
 import requests
 
-from . import exceptions
-from . import settings
-from . import utils
+from haul import exceptions
+from haul import utils
 
 
-simple_url_re = re.compile(r'^https?://\[?\w', re.IGNORECASE)
+class Config(object):
+
+    def __init__(self):
+        # http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser
+        self.parser = 'html5lib'
+
+        # http://www.sitepoint.com/web-foundations/mime-types-complete-list/
+        self.allowed_content_types = [
+            'text/html',
+            'image/',
+        ]
+
+        self.extractor_pipeline = (
+            'haul.extractors.pipeline.html.img_src_finder',
+            'haul.extractors.pipeline.html.a_href_finder',
+            'haul.extractors.pipeline.css.background_image_finder',
+        )
+
+        self.derivator_pipeline = (
+            'haul.derivators.pipeline.google.blogspot_s1600_extender',
+            'haul.derivators.pipeline.google.ggpht_s1600_extender',
+            'haul.derivators.pipeline.google.googleusercontent_s1600_extender',
+            'haul.derivators.pipeline.pinterest.original_image_extender',
+            'haul.derivators.pipeline.wordpress.original_image_extender',
+            'haul.derivators.pipeline.tumblr.media_1280_extender',
+            'haul.derivators.pipeline.tumblr.avatar_128_extender',
+        )
+
+    def add_extract_pipline(self, custom_pipeline, override=False):
+        pass
 
 
-class Haul(object):
+class Procedure(object):
     """
-    Haul
+    The one who actually does the dirty work.
     """
 
-    def __init__(self,
-                 parser=settings.DEFAULT_PARSER,
-                 extractor_pipeline=settings.EXTRACTOR_PIPELINE,
-                 derivator_pipeline=settings.DERIVATOR_PIPELINE):
+    def __init__(self, url_or_html, derive, config):
+        self.url_or_html = url_or_html
+        self.derive = derive
+        self.config = config
 
-        self.parser = parser
-        self.extractor_pipeline = extractor_pipeline
-        self.derivator_pipeline = derivator_pipeline
-
-        self.response = None  # via Requests
+        self.result = Result()
         self.soup = None  # via BeautifulSoup
 
-        self._result = None
+    def start(self):
+        if utils.is_url(self.url_or_html):
+            url = self.url_or_html
+            content_type, content = self.retrieve_url(url)
+        else:
+            content_type = 'text/html'
+            content = self.url_or_html
 
-    def __repr__(self):
-        return '<Haul [parser: %s]>' % (self.parser)
+        self.result.content_type = content_type
 
-    @property
-    def result(self):
-        if not isinstance(self._result, HaulResult):
-            self._result = HaulResult()
+        if '/html' in content_type:
+            self.parse_html(content)
 
-        return self._result
+        self.start_extractor_pipeline()
+
+        if self.derive:
+            self.start_derivator_pipeline()
+
+        return self.result
 
     def retrieve_url(self, url):
         """
@@ -59,17 +89,17 @@ class Haul(object):
         if r.status_code >= 400:
             raise exceptions.RetrieveError('Connected, but status code is %s' % (r.status_code))
 
-        real_url = r.url
+        self.result.url = r.url
         content = r.content
 
         try:
             content_type = r.headers['Content-Type']
         except KeyError:
-            content_type, encoding = mimetypes.guess_type(real_url, strict=False)
+            content_type, encoding = mimetypes.guess_type(self.url, strict=False)
+        finally:
+            content_type = content_type.lower()
 
-        self.response = r
-
-        return content_type.lower(), content
+        return content_type, content
 
     def parse_html(self, html):
         """
@@ -77,16 +107,17 @@ class Haul(object):
         http://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use
         """
 
-        soup = BeautifulSoup(html, self.parser)
-        self.soup = soup
+        self.soup = BeautifulSoup(html, self.config.parser)
 
-        title_tag = soup.find('title')
+        title_tag = self.soup.find('title')
         self.result.title = title_tag.string if title_tag else None
 
-        return soup
-
     def start_extractor_pipeline(self, *args, **kwargs):
+
+        self.result.extractor_image_urls = [str(self.url), ]
+
         pipeline_input = {
+            'procedure': self,
             'soup': self.soup,
         }
         pipeline_output = pipeline_input.copy()
@@ -108,16 +139,12 @@ class Haul(object):
             if pipeline_output['pipeline_break']:
                 break
 
-        # remove unnecessary items
-        pipeline_output.pop('pipeline_index', None)
-        pipeline_output.pop('pipeline_break', None)
-        pipeline_output.pop('soup', None)
-
         self.result.extractor_image_urls = pipeline_output.get('extractor_image_urls', [])
 
-        return self.result
-
     def start_derivator_pipeline(self, *args, **kwargs):
+        if not self.result.extractor_image_urls:
+            return
+
         pipeline_input = {
             'extractor_image_urls': self.result.extractor_image_urls,
         }
@@ -140,53 +167,12 @@ class Haul(object):
             if pipeline_output['pipeline_break']:
                 break
 
-        # remove unnecessary items
-        pipeline_output.pop('pipeline_index', None)
-        pipeline_output.pop('pipeline_break', None)
-        pipeline_output.pop('extractor_image_urls', None)
-
         self.result.derivator_image_urls = pipeline_output.get('derivator_image_urls', [])
 
-        return self.result
 
-    # API
-    def find_images(self, url_or_html, derive=False):
-        url = None
-        content = None
-
-        try:
-            is_url = simple_url_re.match(url_or_html)
-        except TypeError:
-            raise exceptions.InvalidParameterError('Should be a URL or HTML text')
-
-        if is_url:
-            url = url_or_html
-            content_type, content = self.retrieve_url(url)
-        else:
-            content_type = 'text/html'
-            content = url_or_html
-
-        self.result.url = url
-        self.result.content_type = content_type
-
-        if 'text/html' in content_type:
-            self.parse_html(content)
-            self.start_extractor_pipeline()
-            if derive:
-                self.start_derivator_pipeline()
-        elif 'image/' in content_type:
-            self.result.extractor_image_urls = [str(self.response.url), ]
-            if derive:
-                self.start_derivator_pipeline()
-        else:
-            raise exceptions.ContentTypeNotSupported(content_type)
-
-        return self.result
-
-
-class HaulResult(object):
+class Result(object):
     """
-    Retrieval result of Haul
+    Retrieval result of Haul, it's just a container.
     """
 
     def __init__(self):
@@ -197,7 +183,7 @@ class HaulResult(object):
         self.derivator_image_urls = []
 
     def __repr__(self):
-        return '<HaulResult [Content-Type: %s]>' % (self.content_type)
+        return '<Result [Content-Type: %s]>' % (self.content_type)
 
     @property
     def is_found(self):
@@ -220,17 +206,20 @@ class HaulResult(object):
     def to_dict(self):
         return self.__dict__
 
-    def to_ordered_dict(self):
-        order_keys = (
-            'url',
-            'content_type',
-            'title',
-            'extractor_image_urls',
-            'derivator_image_urls',
-        )
 
-        d = OrderedDict()
-        for key in order_keys:
-            d[key] = getattr(self, key)
+class Hauler(object):
+    """
+    The entry point.
+    """
 
-        return d
+    def __init__(self, config=None):
+        if not config:
+            config = Config()
+
+        self.config = config
+
+    def haul(self, url_or_html, derive=False):
+        process = Procedure(url_or_html, derive=derive, config=self.config)
+        result = process.start()
+
+        return result

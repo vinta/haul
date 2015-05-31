@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from ...compat import str
+from haul.compat import str
 
 
 def img_src_finder(pipeline_index,
@@ -8,7 +8,7 @@ def img_src_finder(pipeline_index,
                    extractor_image_urls=[],
                    *args, **kwargs):
     """
-    Find image URL in <img>'s src attribute
+    Find image URLs in <img>'s src attribute
     """
 
     now_extractor_image_urls = []
@@ -32,7 +32,7 @@ def a_href_finder(pipeline_index,
                   extractor_image_urls=[],
                   *args, **kwargs):
     """
-    Find image URL in <a>'s href attribute
+    Find image URLs in <a>'s href attribute
     """
 
     now_extractor_image_urls = []
