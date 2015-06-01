@@ -15,28 +15,35 @@ class Config(object):
 
     def __init__(self):
         # http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser
-        self.parser = 'html5lib'
+        # self.parser = 'html5lib'
+        self.parser = 'lxml'
 
         # http://www.sitepoint.com/web-foundations/mime-types-complete-list/
-        self.allowed_content_types = [
-            'text/html',
-            'image/',
-        ]
+        self.allowed_image_extensions = (
+            '.bmp',
+            '.gif',
+            '.jpg',
+            '.jpeg',
+            '.png',
+            '.wbmp',
+        )
 
         self.extractor_pipeline = (
-            'haul.extractors.pipeline.html.img_src_finder',
-            'haul.extractors.pipeline.html.a_href_finder',
-            'haul.extractors.pipeline.css.background_image_finder',
+            'haul.extractor.pipeline.html.img_tag',
+            'haul.extractor.pipeline.html.a_tag',
+            'haul.extractor.pipeline.html.meta_tag',
+            'haul.extractor.pipeline.css.background_property',
+            'haul.extractor.pipeline.css.background_image_property',
         )
 
         self.derivator_pipeline = (
-            'haul.derivators.pipeline.google.blogspot_s1600_extender',
-            'haul.derivators.pipeline.google.ggpht_s1600_extender',
-            'haul.derivators.pipeline.google.googleusercontent_s1600_extender',
-            'haul.derivators.pipeline.pinterest.original_image_extender',
-            'haul.derivators.pipeline.wordpress.original_image_extender',
-            'haul.derivators.pipeline.tumblr.media_1280_extender',
-            'haul.derivators.pipeline.tumblr.avatar_128_extender',
+            'haul.derivator.pipeline.google.blogspot_s1600_extender',
+            'haul.derivator.pipeline.google.ggpht_s1600_extender',
+            'haul.derivator.pipeline.google.googleusercontent_s1600_extender',
+            'haul.derivator.pipeline.pinterest.original_image_extender',
+            'haul.derivator.pipeline.wordpress.original_image_extender',
+            'haul.derivator.pipeline.tumblr.media_1280_extender',
+            'haul.derivator.pipeline.tumblr.avatar_128_extender',
         )
 
     def add_extract_pipline(self, custom_pipeline, override=False):
@@ -54,7 +61,7 @@ class Procedure(object):
         self.config = config
 
         self.result = Result()
-        self.soup = None  # via BeautifulSoup
+        self.document = None  # via BeautifulSoup
 
     def start(self):
         if utils.is_url(self.url_or_html):
@@ -66,10 +73,13 @@ class Procedure(object):
 
         self.result.content_type = content_type
 
-        if '/html' in content_type:
+        if '/html' in content_type or '/xml' in content_type:
             self.parse_html(content)
-
-        self.start_extractor_pipeline()
+            self.start_extractor_pipeline()
+        elif 'image/' in self.result.content_type:
+            self.result.extractor_image_urls = [self.result.url, ]
+        else:
+            return self.result
 
         if self.derive:
             self.start_derivator_pipeline()
@@ -82,7 +92,10 @@ class Procedure(object):
         """
 
         try:
-            r = requests.get(url)
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36',
+            }
+            r = requests.get(url, headers=headers)
         except requests.ConnectionError:
             raise exceptions.RetrieveError('Connection fail')
 
@@ -107,36 +120,31 @@ class Procedure(object):
         http://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use
         """
 
-        self.soup = BeautifulSoup(html, self.config.parser)
+        self.document = BeautifulSoup(html, self.config.parser)
 
-        title_tag = self.soup.find('title')
+        title_tag = self.document.find('title')
         self.result.title = title_tag.string if title_tag else None
 
     def start_extractor_pipeline(self, *args, **kwargs):
-
-        self.result.extractor_image_urls = [str(self.url), ]
-
         pipeline_input = {
             'procedure': self,
-            'soup': self.soup,
+            'extractor_image_urls': [],
         }
-        pipeline_output = pipeline_input.copy()
+        pipeline_output = {}
 
-        for idx, name in enumerate(self.extractor_pipeline):
-            pipeline_output['pipeline_index'] = idx
-            pipeline_output['pipeline_break'] = False
+        for idx, name in enumerate(self.config.extractor_pipeline):
+            pipeline_input['pipeline_index'] = idx
+            pipeline_input['pipeline_break'] = False
 
             if hasattr(name, '__call__'):
-                finder_func = name
+                extractor_func = name
             else:
-                finder_func = utils.module_member(name)
+                extractor_func = utils.module_member(name)
 
-            output = finder_func(*args, **pipeline_output)
+            output = extractor_func(**pipeline_input)
 
-            if isinstance(output, dict):
-                pipeline_output.update(output)
-
-            if pipeline_output['pipeline_break']:
+            pipeline_output.update(output)
+            if pipeline_output.get('pipeline_break', False):
                 break
 
         self.result.extractor_image_urls = pipeline_output.get('extractor_image_urls', [])
@@ -150,7 +158,7 @@ class Procedure(object):
         }
         pipeline_output = pipeline_input.copy()
 
-        for idx, name in enumerate(self.derivator_pipeline):
+        for idx, name in enumerate(self.config.derivator_pipeline):
             pipeline_output['pipeline_index'] = idx
             pipeline_output['pipeline_break'] = False
 

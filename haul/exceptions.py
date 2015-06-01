@@ -33,7 +33,13 @@ class RetrieveError(RuntimeError):
         self.message = message
 
     def __repr__(self):
-        return '<RetrieveError [message: %s]>' % (self.message)
+        return '<RetrieveError [message: %s]3>' % (self.message)
+
+    def __str__(self):
+        return self.message
+
+    def __unicode__(self):
+        return self.message
 
 
 class ContentTypeNotSupported(Exception):

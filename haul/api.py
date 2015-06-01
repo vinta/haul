@@ -1,9 +1,9 @@
 # coding: utf-8
 
-from .core import Haul
+# from .core import Haul
 
 
-def find_images(url_or_html, *args, **kwargs):
-    h = Haul()
+# def find_images(url_or_html, *args, **kwargs):
+#     h = Haul()
 
-    return h.find_images(url_or_html, *args, **kwargs)
+#     return h.find_images(url_or_html, *args, **kwargs)

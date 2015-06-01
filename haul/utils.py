@@ -36,7 +36,7 @@ def pack_image(content):
     return string_io
 
 
-def is_url(self, url_or_html):
+def is_url(url_or_html):
     try:
         _is_url = SIMPLE_URL_RE.match(url_or_html)
     except TypeError:
