@@ -5,6 +5,7 @@ import cssutils
 from haul import utils
 
 
+# TODO: support external css file
 def background_property(procedure,
                         extractor_image_urls,
                         *args, **kwargs):

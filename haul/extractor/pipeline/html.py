@@ -10,6 +10,7 @@ def img_tag(procedure,
     Extract image URLs from <img> tags.
     """
 
+    # TODO: support srcset attribute
     attributes = ('src', 'data-src')
     for img in procedure.document.find_all('img'):
         for attribute in attributes:

@@ -25,7 +25,7 @@ class Config(object):
             '.jpg',
             '.jpeg',
             '.png',
-            '.wbmp',
+            '.webp',
         )
 
         self.extractor_pipeline = (
@@ -46,7 +46,12 @@ class Config(object):
             'haul.derivator.pipeline.tumblr.avatar_128_extender',
         )
 
-    def add_extract_pipline(self, custom_pipeline, override=False):
+    # TODO
+    def add_extract_pipline(self, custom_pipeline, append=True):
+        pass
+
+    # TODO
+    def add_derivator_pipline(self, custom_pipeline, append=True):
         pass
 
 
@@ -73,10 +78,10 @@ class Procedure(object):
 
         self.result.content_type = content_type
 
-        if '/html' in content_type or '/xml' in content_type:
+        if self.result.is_webpage:
             self.parse_html(content)
             self.start_extractor_pipeline()
-        elif 'image/' in self.result.content_type:
+        elif self.result.is_image:
             self.result.extractor_image_urls = [self.result.url, ]
         else:
             return self.result
@@ -94,6 +99,7 @@ class Procedure(object):
         try:
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36',
+                'Referer': 'http://vinta.ws/',
             }
             r = requests.get(url, headers=headers)
         except requests.ConnectionError:
@@ -192,6 +198,20 @@ class Result(object):
 
     def __repr__(self):
         return '<Result [Content-Type: %s]>' % (self.content_type)
+
+    @property
+    def is_webpage(self):
+        if '/html' in self.content_type or '/xml' in self.content_type:
+            return True
+
+        return False
+
+    @property
+    def is_image(self):
+        if 'image/' in self.content_type:
+            return True
+
+        return False
 
     @property
     def is_found(self):
