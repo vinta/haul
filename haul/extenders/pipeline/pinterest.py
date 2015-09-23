@@ -5,7 +5,7 @@ import re
 
 def original_image_extender(pipeline_index,
                             finder_image_urls,
-                            extender_image_urls=[],
+                            extender_image_urls=None,
                             *args, **kwargs):
     """
     Example:
@@ -15,6 +15,8 @@ def original_image_extender(pipeline_index,
     to
     http://media-cache-ec0.pinimg.com/originals/50/9b/bd/509bbd5c6543d473bc2b49befe75f4c6.jpg
     """
+    if extender_image_urls is None:
+        extender_image_urls = []
 
     now_extender_image_urls = []
 

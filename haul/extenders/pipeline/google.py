@@ -5,7 +5,7 @@ import re
 
 def blogspot_s1600_extender(pipeline_index,
                             finder_image_urls,
-                            extender_image_urls=[],
+                            extender_image_urls=None,
                             *args, **kwargs):
     """
     Example:
@@ -13,6 +13,8 @@ def blogspot_s1600_extender(pipeline_index,
     to
     http://1.bp.blogspot.com/-S97wTYQKbrY/UkWukhKhTKI/AAAAAAAAJ0g/fcRDiqVC8Us/s1600/aaPOP+001.jpg
     """
+    if extender_image_urls is None:
+        extender_image_urls = []
 
     now_extender_image_urls = []
 
@@ -32,7 +34,7 @@ def blogspot_s1600_extender(pipeline_index,
 
 def ggpht_s1600_extender(pipeline_index,
                          finder_image_urls,
-                         extender_image_urls=[],
+                         extender_image_urls=None,
                          *args, **kwargs):
     """
     Example:
@@ -40,6 +42,8 @@ def ggpht_s1600_extender(pipeline_index,
     to
     http://lh4.ggpht.com/-fFi-qJRuxeY/UjwHSOTHGOI/AAAAAAAArgE/SWTMT-hXzB4/s1600/Celeber-ru-Emma-Watson-Net-A-Porter-The-Edit-Magazine-Photoshoot-2013-01.jpg
     """
+    if extender_image_urls is None:
+        extender_image_urls = []
 
     now_extender_image_urls = []
 
@@ -59,7 +63,7 @@ def ggpht_s1600_extender(pipeline_index,
 
 def googleusercontent_s1600_extender(pipeline_index,
                                      finder_image_urls,
-                                     extender_image_urls=[],
+                                     extender_image_urls=None,
                                      *args, **kwargs):
     """
     Example:
@@ -67,6 +71,8 @@ def googleusercontent_s1600_extender(pipeline_index,
     to
     https://lh6.googleusercontent.com/-T6V-utZHzbE/Ukjn-1MDOSI/AAAAAAAAA3g/H6Qcw1zt4n0/s1600/2101_aa2cac09d1c6431b8a635d61cd9c4471.jpg
     """
+    if extender_image_urls is None:
+        extender_image_urls = []
 
     now_extender_image_urls = []
 

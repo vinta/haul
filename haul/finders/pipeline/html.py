@@ -5,11 +5,13 @@ from ...compat import str
 
 def img_src_finder(pipeline_index,
                    soup,
-                   finder_image_urls=[],
+                   finder_image_urls=None,
                    *args, **kwargs):
     """
     Find image URL in <img>'s src attribute
     """
+    if finder_image_urls is None:
+        finder_image_urls = []
 
     now_finder_image_urls = []
 
@@ -29,11 +31,13 @@ def img_src_finder(pipeline_index,
 
 def a_href_finder(pipeline_index,
                   soup,
-                  finder_image_urls=[],
+                  finder_image_urls=None,
                   *args, **kwargs):
     """
     Find image URL in <a>'s href attribute
     """
+    if finder_image_urls is None:
+        finder_image_urls = []
 
     now_finder_image_urls = []
 

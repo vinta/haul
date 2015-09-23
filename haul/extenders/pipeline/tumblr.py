@@ -5,7 +5,7 @@ import re
 
 def media_1280_extender(pipeline_index,
                         finder_image_urls,
-                        extender_image_urls=[],
+                        extender_image_urls=None,
                         *args, **kwargs):
     """
     Example:
@@ -14,6 +14,8 @@ def media_1280_extender(pipeline_index,
     to
     http://25.media.tumblr.com/3f5f10d7216f1dd5eacb5eb3e302286a/tumblr_mtpcwdzKBT1qh9n5lo1_1280.png
     """
+    if extender_image_urls is None:
+        extender_image_urls = []
 
     now_extender_image_urls = []
 
