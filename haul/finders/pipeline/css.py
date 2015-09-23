@@ -5,7 +5,7 @@ import cssutils
 
 def background_image_finder(pipeline_index,
                             soup,
-                            finder_image_urls=[],
+                            finder_image_urls=None,
                             *args, **kwargs):
     """
     Find image URL in background-image
@@ -15,6 +15,8 @@ def background_image_finder(pipeline_index,
     to
     http://distilleryimage10.ak.instagram.com/bde04558a43b11e28e5d22000a1f979a_7.jpg
     """
+    if finder_image_urls is None:
+        finder_image_urls = []
 
     now_finder_image_urls = []
 

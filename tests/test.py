@@ -174,11 +174,13 @@ class CustomFinderPipelineTestCase(HaulBaseTestCase):
 
         def img_data_src_finder(pipeline_index,
                                 soup,
-                                finder_image_urls=[],
+                                finder_image_urls=None,
                                 *args, **kwargs):
             """
             Find image URL in <img>'s data-src attribute
             """
+            if finder_image_urls is None:
+                finder_image_urls = []
 
             now_finder_image_urls = []
 
